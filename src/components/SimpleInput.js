@@ -22,6 +22,12 @@ const SimpleInput = (props) => {
   // handler for form submission
   const formSubmitHandler = (event) => {
     event.preventDefault();
+
+    // form input validation
+    if (enteredName.trim() === "") {
+      return;
+    }
+
     console.log("state value", enteredName);
 
     // get current ref value
