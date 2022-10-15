@@ -14,7 +14,7 @@ const SimpleInput = (props) => {
   const nameInputChangeHandler = (event) => {
     setEnteredName(event.target.value);
     // form input validation
-    if (enteredName.trim() !== "") {
+    if (event.target.value.trim() !== "") {
       setinputIsValid(true);
     }
   };
