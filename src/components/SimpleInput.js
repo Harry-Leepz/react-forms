@@ -7,42 +7,33 @@ import { useState } from "react";
 
 const SimpleInput = (props) => {
   const [enteredName, setEnteredName] = useState("");
-  const [inputIsValid, setinputIsValid] = useState(false);
   const [inputIsTouched, setInputIsTouched] = useState(false);
+
+  // boolean values used for validation
+  const enteredNameIsValid = enteredName.trim() !== "";
+  const nameInputIsInvalid = !enteredNameIsValid && inputIsTouched;
 
   // set state to the target value bound to this function
   const nameInputChangeHandler = (event) => {
     setEnteredName(event.target.value);
-    // form input validation
-    if (event.target.value.trim() !== "") {
-      setinputIsValid(true);
-    }
   };
 
   const nameinputBlurHandler = (event) => {
     setInputIsTouched(true);
-    // form input validation
-    if (enteredName.trim() === "") {
-      setinputIsValid(false);
-    }
   };
 
   // handler for form submission
   const formSubmitHandler = (event) => {
     event.preventDefault();
-    setInputIsTouched(true);
-    // form input validation
-    if (enteredName.trim() === "") {
-      setinputIsValid(false);
+
+    if (!enteredNameIsValid) {
       return;
     }
-    setinputIsValid(true);
-    console.log("state value", enteredName);
+
     // reset form input fields using two way data binding
     setEnteredName("");
+    setInputIsTouched(false);
   };
-
-  const nameInputIsInvalid = !inputIsValid && inputIsTouched;
 
   const nameInputCssClasses = nameInputIsInvalid
     ? "form-control invalid"
