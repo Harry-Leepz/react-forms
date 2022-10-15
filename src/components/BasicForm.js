@@ -50,7 +50,10 @@ const BasicForm = (props) => {
     emailReset();
   };
 
-  const inputCssClasses = hasError ? "form-control invalid" : "form-control";
+  const inputCssClasses =
+    hasError && lNameHasError && emailHasError
+      ? "form-control invalid"
+      : "form-control";
 
   return (
     <form onSubmit={formSubmitHandler}>
@@ -64,7 +67,7 @@ const BasicForm = (props) => {
             onBlur={valueBlurhandler}
             value={value}
           />
-          {hasError && <p>Input is not valid</p>}
+          {hasError && <p className='error-text'>Input is not valid</p>}
         </div>
         <div className={inputCssClasses}>
           <label htmlFor='last-name'>Last Name</label>
@@ -75,7 +78,7 @@ const BasicForm = (props) => {
             onBlur={lNameValueBlurhandler}
             value={lNameValue}
           />
-          {lNameHasError && <p>Input is not valid</p>}
+          {lNameHasError && <p className='error-text'>Input is not valid</p>}
         </div>
       </div>
       <div className={inputCssClasses}>
@@ -87,7 +90,7 @@ const BasicForm = (props) => {
           onBlur={emailBlurhandler}
           value={emailValue}
         />
-        {emailHasError && <p>Input is not valid</p>}
+        {emailHasError && <p className='error-text'>Input is not valid</p>}
       </div>
       <div className='form-actions'>
         <button disabled={!isFormValid}>Submit</button>
