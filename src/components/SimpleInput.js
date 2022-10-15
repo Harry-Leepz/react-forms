@@ -1,50 +1,44 @@
 import { useEffect, useState } from "react";
 
+import useInput from "../hooks/useInput";
+
 /*
   A form component with a single input, 
   used to test input capturing and validation
 */
 
 const SimpleInput = (props) => {
-  const [enteredName, setEnteredName] = useState("");
-  const [inputIsTouched, setInputIsTouched] = useState(false);
+  const {
+    value,
+    isValid,
+    hasError,
+    valueChangehandler,
+    valueBlurhandler,
+    reset,
+  } = useInput((value) => value.trim() !== "");
+
   const [formIsValid, setFormIsValid] = useState(false);
 
-  // boolean values used for validation
-  const enteredNameIsValid = enteredName.trim() !== "";
-  const nameInputIsInvalid = !enteredNameIsValid && inputIsTouched;
-
   useEffect(() => {
-    if (enteredNameIsValid) {
+    if (isValid) {
       setFormIsValid(true);
     } else {
       setFormIsValid(false);
     }
-  }, [enteredNameIsValid]);
-
-  // set state to the target value bound to this function
-  const nameInputChangeHandler = (event) => {
-    setEnteredName(event.target.value);
-  };
-
-  const nameinputBlurHandler = (event) => {
-    setInputIsTouched(true);
-  };
+  }, [isValid]);
 
   // handler for form submission
   const formSubmitHandler = (event) => {
     event.preventDefault();
 
-    if (!enteredNameIsValid) {
+    if (!isValid) {
       return;
     }
 
-    // reset form input fields using two way data binding
-    setEnteredName("");
-    setInputIsTouched(false);
+    reset();
   };
 
-  const nameInputCssClasses = nameInputIsInvalid
+  const nameInputCssClasses = hasError
     ? "form-control invalid"
     : "form-control";
 
@@ -55,13 +49,11 @@ const SimpleInput = (props) => {
         <input
           type='text'
           id='name'
-          onChange={nameInputChangeHandler}
-          onBlur={nameinputBlurHandler}
-          value={enteredName}
+          onChange={valueChangehandler}
+          onBlur={valueBlurhandler}
+          value={value}
         />
-        {nameInputIsInvalid && (
-          <p className='error-text'>Please input a name!</p>
-        )}
+        {hasError && <p className='error-text'>Please input a name!</p>}
       </div>
       <div className='form-actions'>
         <button disabled={!formIsValid}>Submit</button>
