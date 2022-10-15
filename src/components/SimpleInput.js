@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 /*
   A basic form component used as an example. 
@@ -16,17 +16,29 @@ const SimpleInput = (props) => {
     setEnteredName(event.target.value);
   };
 
+  // 2. Using refs
+  const nameInputRef = useRef();
+
   // handler for form submission
   const formSubmitHandler = (event) => {
     event.preventDefault();
-    console.log(enteredName);
+    console.log("state value", enteredName);
+
+    // get current ref value
+    const nameInputRefValue = nameInputRef.current.value;
+    console.log("ref value", nameInputRefValue);
   };
 
   return (
     <form onSubmit={formSubmitHandler}>
       <div className='form-control'>
         <label htmlFor='name'>Your Name</label>
-        <input type='text' id='name' onChange={nameInputChangeHandler} />
+        <input
+          ref={nameInputRef}
+          type='text'
+          id='name'
+          onChange={nameInputChangeHandler}
+        />
       </div>
       <div className='form-actions'>
         <button>Submit</button>
