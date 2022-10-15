@@ -17,15 +17,24 @@ const SimpleInput = (props) => {
     reset,
   } = useInput((value) => value.trim() !== "");
 
+  const {
+    value: emailValue,
+    isValid: emailIsValid,
+    hasError: emailHasError,
+    valueChangehandler: emailValueChangehandler,
+    valueBlurhandler: emailValueBlurhandler,
+    reset: emeailreset,
+  } = useInput((value) => value.trim().includes("@"));
+
   const [formIsValid, setFormIsValid] = useState(false);
 
   useEffect(() => {
-    if (isValid) {
+    if (isValid && emailIsValid) {
       setFormIsValid(true);
     } else {
       setFormIsValid(false);
     }
-  }, [isValid]);
+  }, [isValid, emailIsValid]);
 
   // handler for form submission
   const formSubmitHandler = (event) => {
@@ -35,7 +44,12 @@ const SimpleInput = (props) => {
       return;
     }
 
+    if (!emailIsValid) {
+      return;
+    }
+
     reset();
+    emeailreset();
   };
 
   const nameInputCssClasses = hasError
@@ -54,6 +68,19 @@ const SimpleInput = (props) => {
           value={value}
         />
         {hasError && <p className='error-text'>Please input a name!</p>}
+      </div>
+      <div className={nameInputCssClasses}>
+        <label htmlFor='email'>Your Email</label>
+        <input
+          type='email'
+          id='email'
+          onChange={emailValueChangehandler}
+          onBlur={emailValueBlurhandler}
+          value={emailValue}
+        />
+        {emailHasError && (
+          <p className='error-text'>Please input a valid email!</p>
+        )}
       </div>
       <div className='form-actions'>
         <button disabled={!formIsValid}>Submit</button>
